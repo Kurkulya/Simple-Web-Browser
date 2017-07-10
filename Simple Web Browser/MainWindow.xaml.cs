@@ -23,6 +23,65 @@ namespace Simple_Web_Browser
         public MainWindow()
         {
             InitializeComponent();
+            WebBrowser.Navigated += (sender,e) => txtUrl.Text = WebBrowser.Source.ToString();
+        }
+
+        private void GoBack(object sender, RoutedEventArgs e)
+        {
+            WebBrowser.GoBack();
+        }
+
+        private void GoNext(object sender, RoutedEventArgs e)
+        {
+            WebBrowser.GoForward();
+        }
+
+        private void RefreshPage(object sender, RoutedEventArgs e)
+        {
+            WebBrowser.Refresh();
+        }
+
+        private void GoUrl(object sender, RoutedEventArgs e)
+        {
+            string address = txtUrl.Text; 
+            if (String.IsNullOrEmpty(address)) return;
+            if (address.Equals("about:blank")) return;
+            if (!address.StartsWith("http://") &&
+                !address.StartsWith("https://"))
+            {
+                address = "http://" + address;
+            }
+            try
+            {
+                WebBrowser.Navigate(address);
+            }
+            catch (System.UriFormatException)
+            {
+                return;
+            }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string address = txtUrl.Text;
+                if (String.IsNullOrEmpty(address)) return;
+                if (address.Equals("about:blank")) return;
+                if (!address.StartsWith("http://") &&
+                    !address.StartsWith("https://"))
+                {
+                    address = "http://" + address;
+                }
+                try
+                {
+                    WebBrowser.Navigate(address);
+                }
+                catch (System.UriFormatException)
+                {
+                    return;
+                }
+            }
         }
     }
 }
